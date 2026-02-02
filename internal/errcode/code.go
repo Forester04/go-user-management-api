@@ -18,7 +18,7 @@ var (
 
 	// database errors (200-299)
 	ErrDatabase          = newErrcode("database error", 200)
-	ErrDatabasemigration = newErrcode("database migration error", 201)
+	ErrDatabaseMigration = newErrcode("database migration error", 201)
 	ErrDropProduction    = newErrcode("production database cannot be dropped", 202)
 
 	// controllers errors (300-399)
