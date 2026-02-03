@@ -15,7 +15,7 @@ import (
 func (svc *Service) RegisterUser(registerUser *dto.RegisterUser) (user *models.User, err error) {
 	user, err = svc.globalRepository.User.GetByEmail(registerUser.Email)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %v", errcode.ErrDatabase)
+		return nil, fmt.Errorf("%w: %v", errcode.ErrDatabase, err)
 	}
 
 	if user.ID != 0 {
@@ -80,4 +80,24 @@ func (svc *Service) formatRegisterUser(registerUser *dto.RegisterUser) (user *mo
 		BirthDate: &parsedBirthDate,
 	}
 	return user, nil
+}
+
+func (svc *Service) GetUser(id uint) (user *models.User, err error) {
+	user, err = svc.globalRepository.User.GetByID(id)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", errcode.ErrDatabase, err)
+	}
+
+	if user.ID == 0 {
+		return nil, fmt.Errorf("%w: %v", errcode.ErrNotFound, err)
+	}
+	return user, nil
+}
+
+func (svc *Service) DeleteUser(id uint) (err error) {
+	err = svc.globalRepository.User.Delete(id)
+	if err != nil {
+		return fmt.Errorf("%w: %v", errcode.ErrDatabase, err)
+	}
+	return nil
 }

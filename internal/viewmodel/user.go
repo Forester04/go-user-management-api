@@ -6,7 +6,7 @@ type GetUserRequest struct {
 
 type GetUserResponse struct {
 	Body struct {
-		Id   uint   `json:"id"`
+		ID   uint   `json:"id"`
 		Name string `json:"name"`
 	} `json:"body"`
 }
