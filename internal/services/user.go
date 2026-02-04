@@ -94,6 +94,18 @@ func (svc *Service) GetUser(id uint) (user *models.User, err error) {
 	return user, nil
 }
 
+func (svc *Service) GetAllUsers() (users []*models.User, err error) {
+	users, err = svc.globalRepository.User.GetAll()
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", errcode.ErrDatabase, err)
+	}
+
+	if len(users) == 0 {
+		return nil, fmt.Errorf("%w: %v", errcode.ErrNotFound, err)
+	}
+	return users, nil
+}
+
 func (svc *Service) DeleteUser(id uint) (err error) {
 	err = svc.globalRepository.User.Delete(id)
 	if err != nil {

@@ -1,14 +1,15 @@
 package controllers
 
 import (
+	"net/http"
 	"reflect"
 	"strings"
 
 	"github.com/Forester04/go-user-management-api/internal/services"
+	"github.com/Forester04/go-user-management-api/internal/viewmodel"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator"
-	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +23,9 @@ func NewRouter(logger *zap.Logger, svc services.ServiceInterface) *Router {
 
 	router.logger = logger
 	router.engine = gin.Default()
+	config(router.engine)
 
+	/* Middleswares */
 	router.engine.Use(router.corsMiddleware())
 	router.engine.Use(router.responseViewmodelMiddleware())
 	router.engine.Use(router.errorHandlerMiddleware())
@@ -40,6 +43,23 @@ func (rtr *Router) registerRoutes(svc services.ServiceInterface) {
 	/* Auth */
 	auth := rtr.engine.Group("/auth")
 	registerAuthRoutes(auth, svc)
+
+	/* User */
+	user := rtr.engine.Group("/user")
+	registerUserRoutes(user, svc)
+
+	rtr.engine.GET("/health", healthController())
+}
+
+func healthController() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		response := &viewmodel.HealthResponse{}
+
+		response.Body.Message = "health OK"
+
+		ctx.Set(ContextKeyStatusCode, http.StatusOK)
+		ctx.Set(ContextKeyResponseviewmodel, response)
+	}
 }
 
 func config(router *gin.Engine) {

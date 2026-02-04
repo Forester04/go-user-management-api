@@ -18,7 +18,7 @@ func (svc *Service) GenerateToken(user *models.User) (toeknString string, err er
 		"iat":   time.Now().Unix(),
 	})
 
-	tokenString, err := token.SignedString([]byte(viper.GetString("JET_SECRET")))
+	tokenString, err := token.SignedString([]byte(viper.GetString("JWT_SECRET")))
 	if err != nil {
 		return "", fmt.Errorf("%w: %v", errcode.ErrGeneratingToken, err)
 	}

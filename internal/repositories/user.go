@@ -9,6 +9,7 @@ type UserRepositoryInterface interface {
 	Create(user *models.User) error
 	GetByEmail(email string) (user *models.User, err error)
 	GetByID(id uint) (user *models.User, err error)
+	GetAll() (users []*models.User, err error)
 	UpdateColumns(user *gorm.Model) error
 	Update(user *models.User) error
 	Delete(id uint) error
@@ -37,6 +38,14 @@ func (rpt *UserRepository) GetByID(id uint) (user *models.User, err error) {
 		return nil, err
 	}
 	return user, nil
+}
+
+func (rpt *UserRepository) GetAll() (users []*models.User, err error) {
+	users = []*models.User{}
+	if err = rpt.DB.Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
 func (rpt *UserRepository) UpdateColumns(user *gorm.Model) error {

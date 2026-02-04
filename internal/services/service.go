@@ -13,6 +13,7 @@ type ServiceInterface interface {
 	formatRegisterUser(registerUser *dto.RegisterUser) (user *models.User, err error)
 	GenerateToken(user *models.User) (toeknString string, err error)
 	GetUser(id uint) (user *models.User, err error)
+	GetAllUsers() (users []*models.User, err error)
 	DeleteUser(id uint) (err error)
 }
 

@@ -7,5 +7,5 @@ type RegisterUser struct {
 	LastName  string `json:"last_name" binding:"required"`
 	Phone     string `json:"phone" binding:"omitempty,e164"`
 	BirthDate string `json:"birth_date" binding:"omitempty,datetime=2006-01-02"`
-	IsActive  bool   `json:"is_active"`
+	IsActive  bool   `json:"is_active" binding:"omitempty"`
 }

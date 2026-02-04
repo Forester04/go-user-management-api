@@ -11,12 +11,13 @@ import (
 )
 
 func dnsBuilder() string {
-	host := viper.GetString("DATABASE_HOST")
-	port := viper.GetString("POSTGRES_PORT")
-	user := viper.GetString("POSTGRES_USER")
-	password := viper.GetString("POSTGRES_PASSWORD")
-	dbName := viper.GetString("POSTGRES_DB")
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=Africe/Nairobi", host, port, user, password, dbName)
+	// host := viper.GetString("DATABASE_HOST")
+	// port := viper.GetString("POSTGRES_PORT")
+	// user := viper.GetString("POSTGRES_USER")
+	// password := viper.GetString("POSTGRES_PASSWORD")
+	// dbName := viper.GetString("POSTGRES_DB")
+	connectionString := viper.GetString("CONNECTION_STRING")
+	return connectionString
 }
 
 func NewGormClient() (*gorm.DB, error) {
@@ -35,7 +36,7 @@ func NewGormClient() (*gorm.DB, error) {
 	}
 
 	if viper.GetBool("SEED_DB") {
-
+		//CreateEntities(db)
 	}
 
 	return db, nil

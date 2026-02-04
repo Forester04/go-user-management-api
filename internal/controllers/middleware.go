@@ -65,7 +65,7 @@ func requestViewmodelMiddleware(requestViewmodel interface{}) gin.HandlerFunc {
 }
 
 func bindURITaggedFields(ctx *gin.Context, data interface{}) error {
-	val := reflect.ValueOf(data)
+	val := reflect.ValueOf(data).Elem()
 	typ := val.Type()
 
 	for i := 0; i < val.NumField(); i++ {

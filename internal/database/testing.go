@@ -39,7 +39,8 @@ func createEntities(tx *gorm.DB, entities ...interface{}) error {
 
 		// create entity if the table is empty
 		if err := tx.Clauses(clause.OnConflict{
-			Columns: []clause.Column{{Name: "id"}},
+			Columns:   []clause.Column{{Name: "id"}},
+			UpdateAll: true,
 		}).Create(entity).Error; err != nil {
 			if gorm.ErrDuplicatedKey == err {
 				fmt.Printf("%T already exist\n", entity)

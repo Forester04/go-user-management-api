@@ -9,6 +9,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func registerUserRoutes(group *gin.RouterGroup, svc services.ServiceInterface) {
+	group.GET("/", listUsersController(svc))
+	group.GET("/:id", requestViewmodelMiddleware(&viewmodel.GetUserRequest{}), getUserController(svc))
+	group.DELETE("/:id", requestViewmodelMiddleware(&viewmodel.DeleteUserRequest{}), deleteUserController(svc))
+}
+
+func listUsersController(svc services.ServiceInterface) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		response := &viewmodel.GetAllUsersByEmailResponse{}
+
+		users, err := svc.GetAllUsers()
+		if err != nil {
+			ctx.Error(err)
+			return
+		}
+
+		response.Body.Emails = users
+
+		ctx.Set(ContextKeyResponseviewmodel, response)
+
+	}
+}
+
 func getUserController(svc services.ServiceInterface) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		request := ctx.MustGet(ContextKeyRequestViewmodel).(*viewmodel.GetUserRequest)
@@ -28,7 +51,7 @@ func getUserController(svc services.ServiceInterface) gin.HandlerFunc {
 	}
 }
 
-func deleteUser(svc services.ServiceInterface) gin.HandlerFunc {
+func deleteUserController(svc services.ServiceInterface) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		request := ctx.MustGet(ContextKeyRequestViewmodel).(*viewmodel.DeleteUserRequest)
 		response := &viewmodel.DeleteUserResponse{}
